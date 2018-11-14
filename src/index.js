@@ -12,9 +12,26 @@ import './assets/css/notificacao.css'
 import './assets/css/novoTweet.css'
 // import './index.css';
 
-
-import App from './App';
+// ./App virou ./pages/HomePage
+import HomePage from './pages/HomePage'; 
+import LoginPage from './pages/LoginPage';
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import { BrowserRouter } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
+
+ReactDOM.render(
+    <BrowserRouter>
+        <Switch>
+            <Route path="/" exact component={HomePage} />
+            <Route path="/login" component={LoginPage} />
+        </Switch>
+    </BrowserRouter>
+    , document.getElementById('root'));
 registerServiceWorker();
+
+// if(window.location.href.includes('/login')) {
+//     <LoginPage />
+// } else {
+//     <HomePage />
+// }
