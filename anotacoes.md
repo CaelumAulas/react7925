@@ -52,3 +52,26 @@ criação de interfaces de usuario"
 
 ## Deu problema no react
 - "rm -rf node_modules && npm install && npm start"
+
+## Funcoes do JavaScript
+```js
+Array.prototype.forEach = function(funcao) {
+    const array = this
+    for(item of array) {
+        funcao(item)
+    }
+}
+// undefined
+
+Array.prototype.map = function(funcao) {
+    const array = this
+    const novoArray = []
+    for(item of array) {
+        novoArray.push(funcao(item))
+    }
+    return novoArray
+} 
+```
+
+## Curiosidades da vida
+- https://0.30000000000000004.com/
