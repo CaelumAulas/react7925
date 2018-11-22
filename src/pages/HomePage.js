@@ -126,9 +126,9 @@ class App extends Component {
                                 {
                                     this.state.tweets.map((tweetAtual, indice) => {
                                         // console.log(tweetAtual.usuario)
-                                        console.log(tweetAtual)
                                         return <Tweet
                                             key={indice}
+                                            id={tweetAtual._id}
                                             usuario={tweetAtual.usuario}
                                             texto={tweetAtual.conteudo}
                                             likeado={tweetAtual.likeado}
