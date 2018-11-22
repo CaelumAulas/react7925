@@ -75,3 +75,12 @@ Array.prototype.map = function(funcao) {
 
 ## Curiosidades da vida
 - https://0.30000000000000004.com/
+
+
+## Coisas sobre testes
+- https://github.com/kentcdodds/react-testing-library
+- https://jestjs.io/
+
+## Pra acabar as dicussões sobre if e switch
+- https://www.youtube.com/watch?v=i3LRWERf74M
+- https://javascript30.com/

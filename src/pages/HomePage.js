@@ -5,7 +5,7 @@ import Dashboard from '../components/Dashboard'
 import Widget from '../components/Widget'
 import TrendsArea from '../components/TrendsArea'
 import Tweet from '../components/Tweet'
-
+import Helmet from 'react-helmet'
 
 
 class App extends Component {
@@ -15,23 +15,54 @@ class App extends Component {
 
         this.state = {
             novoTweet: 'alo alo w brazil',
-            tweets: ['tweet real da vida']
+            tweets: []
         }
         // this.adicionaTweet = this.adicionaTweet.bind(this)
+    }
+    
+    // Métodos do Ciclo de Vida
+    componentDidMount() {
+        fetch(`http://twitelum-api.herokuapp.com/tweets?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`)
+        .then((respostaDoServer) => {
+            return respostaDoServer.json()
+        })
+        .then((tweetsQueVieramDoServer) => {
+            this.setState({
+                tweets: tweetsQueVieramDoServer
+            })
+        })
     }
 
     adicionaTweet = (infoDosEvento) => {
         infoDosEvento.preventDefault()
         const novoTweet = this.state.novoTweet
-        this.setState({
-            tweets: [novoTweet, ...this.state.tweets],
-            novoTweet: ''
+        
+        fetch(`http://twitelum-api.herokuapp.com/tweets?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json',
+                // 'Authorization': localStorage.getItem('TOKEN')
+            },
+            body: JSON.stringify({ conteudo: novoTweet })
+        })
+        .then((respostaDoServer) => {
+            return respostaDoServer.json()
+        })
+        .then((tweetQueVeioDoServer) => {
+        // console.log('Resposta: ', tweetQueVeioDoServer)
+            this.setState({
+                tweets: [tweetQueVeioDoServer, ...this.state.tweets],
+                novoTweet: ''
+            })
         })
     }
     
     render() {
         return (
             <Fragment>
+                <Helmet>
+                    <title>{`Home (${this.state.tweets.length}) - Twitelum`}</title>
+                </Helmet>
                 <Cabecalho>
                     <NavMenu usuario="@omariosouto" />
                 </Cabecalho>
@@ -87,8 +118,18 @@ class App extends Component {
                         <Widget>
                             <div className="tweetsArea">
                                 {
+                                    this.state.tweets.length === 0
+                                    ? 'Cargando...'
+                                    : '' 
+                                }
+
+                                {
                                     this.state.tweets.map((tweetAtual, indice) => {
-                                        return <Tweet key={indice} texto={tweetAtual} />
+                                        // console.log(tweetAtual.usuario)
+                                        return <Tweet
+                                            key={indice}
+                                            usuario={tweetAtual.usuario}
+                                            texto={tweetAtual.conteudo} />
                                     })
                                 }
                             </div>

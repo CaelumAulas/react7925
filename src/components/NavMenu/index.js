@@ -1,7 +1,14 @@
 import React, { Component } from 'react'
+import { withRouter } from 'react-router-dom'
 import './navMenu.css'
 
 class NavMenu extends Component {
+    fazLogout = (event) => {
+        event.preventDefault()
+        localStorage.removeItem('TOKEN')
+        this.props.history.push('/login')
+    }
+
     render() {
         return (
             <nav className="navMenu">
@@ -19,7 +26,7 @@ class NavMenu extends Component {
                     <a className="navMenu__link" href="/">Hashtags</a>
                 </li>
                 <li className="navMenu__item">
-                    <a className="navMenu__link" href="/">Logout</a>
+                    <a className="navMenu__link" onClick={this.fazLogout} href="/logout">Logout</a>
                 </li>
                 </ul>
             </nav>
@@ -27,4 +34,5 @@ class NavMenu extends Component {
     }
 }
 
-export default NavMenu
+// Decorator
+export default withRouter(NavMenu)

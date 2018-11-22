@@ -1,9 +1,31 @@
 import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
+import Loadable from 'react-loadable';
 
-import HomePage from './pages/HomePage'; 
-import LoginPage from './pages/LoginPage';
-import Page404 from './pages/Page404';
+const HomePage = Loadable({
+  loader: () => import('./pages/HomePage'),
+  loading() {
+    return <div>Loading...</div>
+  }
+});
+
+const LoginPage = Loadable({
+    loader: () => import('./pages/LoginPage'),
+    loading() {
+        return <div>Loading...</div>
+    }
+});
+
+const Page404 = Loadable({
+    loader: () => import('./pages/Page404'),
+    loading() {
+        return <div>Loading...</div>
+    }
+});
+
+// import HomePage from './pages/HomePage'; 
+// import LoginPage from './pages/LoginPage';
+// import Page404 from './pages/Page404';
 
 class PrivateRoute extends React.Component {
     render() {
