@@ -126,10 +126,13 @@ class App extends Component {
                                 {
                                     this.state.tweets.map((tweetAtual, indice) => {
                                         // console.log(tweetAtual.usuario)
+                                        console.log(tweetAtual)
                                         return <Tweet
                                             key={indice}
                                             usuario={tweetAtual.usuario}
-                                            texto={tweetAtual.conteudo} />
+                                            texto={tweetAtual.conteudo}
+                                            likeado={tweetAtual.likeado}
+                                            totalLikes={tweetAtual.totalLikes}/>
                                     })
                                 }
                             </div>
