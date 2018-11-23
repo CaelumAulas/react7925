@@ -6,7 +6,7 @@ import Widget from '../components/Widget'
 import TrendsArea from '../components/TrendsArea'
 import Tweet from '../components/Tweet'
 import Helmet from 'react-helmet'
-
+import Modal from '../components/Modal';
 
 class App extends Component {
 
@@ -55,6 +55,35 @@ class App extends Component {
                 novoTweet: ''
             })
         })
+    }
+
+    removeTweet = (idDoTweet) => {
+        fetch(`http://twitelum-api.herokuapp.com/tweets/${idDoTweet}?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`, {
+            method: 'DELETE',
+        })
+        .then((res) => res.json())
+        .then((respostaConvertida) => {
+            console.log(respostaConvertida)
+            const listaAtualizada = this.state.tweets.filter((tweetAtual) => {
+                return tweetAtual._id !== idDoTweet
+            })
+    
+            this.setState({
+                tweets: listaAtualizada
+            })
+        })
+    }
+
+
+    abreModal = (objetoDoTweetClicado) => {
+        console.log(objetoDoTweetClicado)
+        // this.setState({
+        //     tweetAtivo: {
+        //         id: 'udsahudsa',
+        //         conteudo: 'x',
+        //         usuario: {}
+        //     }
+        // })
     }
     
     render() {
@@ -125,20 +154,41 @@ class App extends Component {
 
                                 {
                                     this.state.tweets.map((tweetAtual, indice) => {
-                                        // console.log(tweetAtual.usuario)
                                         return <Tweet
-                                            key={indice}
+                                            key={tweetAtual._id}
                                             id={tweetAtual._id}
                                             usuario={tweetAtual.usuario}
                                             texto={tweetAtual.conteudo}
                                             likeado={tweetAtual.likeado}
-                                            totalLikes={tweetAtual.totalLikes}/>
+                                            removivel={tweetAtual.removivel}
+                                            totalLikes={tweetAtual.totalLikes}
+                                            removeHandler={() => this.removeTweet(tweetAtual._id)}
+                                            handleAbreModal={() => this.abreModal(tweetAtual)}/>
+                                            // Fazer o setState que limpa os tweets
+                                            // na função removeTweet() na classe HomePage
                                     })
                                 }
                             </div>
                         </Widget>
                     </Dashboard>
                 </div>
+
+                <Modal isAberto={false}>
+                    <Widget>
+                        <Tweet 
+                            id="asudshu"
+                            texto="xablau"
+                            usuario={
+                                {
+                                    foto: 'asas',
+                                    nome: 'Teste',
+                                    login: 'x'
+                                }
+                            }
+                        />
+                    </Widget>
+                </Modal>
+
             </Fragment>
         );
     }

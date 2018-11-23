@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import './tweet.css'
+import PropTypes from 'prop-types'
 
 class Tweet extends Component {
 
@@ -10,6 +11,10 @@ class Tweet extends Component {
             likeado: props.likeado,
             totalLikes: props.totalLikes
         }
+
+        // if(typeof props.likeado !== 'boolean') {
+        //     console.error('Você passou um valor errado seu vacila1')
+        // }
     }
 
     like = () => {
@@ -35,7 +40,7 @@ class Tweet extends Component {
 
     render() {
         return (
-            <article className="tweet">
+            <article className="tweet" onClick={this.props.handleAbreModal}>
                 <div className="tweet__cabecalho">
                     <img className="tweet__fotoUsuario" src={this.props.usuario.foto} alt="" />
                     <span className="tweet__nomeUsuario">{this.props.usuario.nome}</span>
@@ -63,10 +68,32 @@ class Tweet extends Component {
                         </svg>
                         {this.state.totalLikes}
                     </button>
+                        
+                    {
+                        this.props.removivel &&
+                        <button className="btn btn--blue btn--remove" onClick={this.props.removeHandler}>
+                            X
+                        </button>
+                    }
                 </footer>
             </article>
         )
     }
+}
+
+
+Tweet.propTypes = {
+    id: PropTypes.string.isRequired,
+    texto: PropTypes.string.isRequired,
+    usuario: PropTypes.shape({
+        foto: PropTypes.string,
+        nome: PropTypes.string,
+        login: PropTypes.string
+    }).isRequired,
+    likeado: PropTypes.bool,
+    removivel: PropTypes.bool,
+    totalLikes: PropTypes.number,
+    removeHandler: PropTypes.func
 }
 
 export default Tweet
