@@ -101,3 +101,6 @@ Array.prototype.map = function(funcao) {
 
 ## Qualidade de Código
 - https://www.casadocodigo.com.br/products/livro-oo-solid
+- https://www.youtube.com/watch?v=Kphwg2IsJfA
+- https://circleci.com/
+-  https://github.com/omariosouto/cmail-back/blob/master/.circleci/config.yml

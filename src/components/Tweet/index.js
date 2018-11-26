@@ -11,7 +11,6 @@ class Tweet extends Component {
             likeado: props.likeado,
             totalLikes: props.totalLikes
         }
-
         // if(typeof props.likeado !== 'boolean') {
         //     console.error('Você passou um valor errado seu vacila1')
         // }
@@ -40,13 +39,13 @@ class Tweet extends Component {
 
     render() {
         return (
-            <article className="tweet" onClick={this.props.handleAbreModal}>
-                <div className="tweet__cabecalho">
+            <article className="tweet">
+                <div className="tweet__cabecalho"  onClick={this.props.handleAbreModal}>
                     <img className="tweet__fotoUsuario" src={this.props.usuario.foto} alt="" />
                     <span className="tweet__nomeUsuario">{this.props.usuario.nome}</span>
                     <a href="/"><span className="tweet__userName">@{this.props.usuario.login}</span></a>
                 </div>
-                <p className="tweet__conteudo">
+                <p className="tweet__conteudo"  onClick={this.props.handleAbreModal}>
                     {this.props.texto}
                 </p>
                 <footer className="tweet__footer">
@@ -78,6 +77,14 @@ class Tweet extends Component {
                 </footer>
             </article>
         )
+    }
+
+    static defaultProps = {
+        usuario: {},
+        totalLikes: 0,
+        likeado: false,
+        id: '',
+        texto: ''
     }
 }
 

@@ -15,7 +15,8 @@ class App extends Component {
 
         this.state = {
             novoTweet: 'alo alo w brazil',
-            tweets: []
+            tweets: [],
+            tweetAtivo: {}
         }
         // this.adicionaTweet = this.adicionaTweet.bind(this)
     }
@@ -71,19 +72,24 @@ class App extends Component {
             this.setState({
                 tweets: listaAtualizada
             })
+
+            this.fechaModal()
         })
     }
 
 
     abreModal = (objetoDoTweetClicado) => {
-        console.log(objetoDoTweetClicado)
-        // this.setState({
-        //     tweetAtivo: {
-        //         id: 'udsahudsa',
-        //         conteudo: 'x',
-        //         usuario: {}
-        //     }
-        // })
+        this.setState({
+            tweetAtivo: objetoDoTweetClicado
+        }, () => {
+            console.log('State atual', this.state)
+        })   
+    }
+
+    fechaModal = () => {
+        this.setState({
+            tweetAtivo: {}
+        })
     }
     
     render() {
@@ -173,18 +179,18 @@ class App extends Component {
                     </Dashboard>
                 </div>
 
-                <Modal isAberto={false}>
+                <Modal 
+                    onFechandoOModal={this.fechaModal}
+                    isAberto={Boolean(this.state.tweetAtivo._id)}>
                     <Widget>
-                        <Tweet 
-                            id="asudshu"
-                            texto="xablau"
-                            usuario={
-                                {
-                                    foto: 'asas',
-                                    nome: 'Teste',
-                                    login: 'x'
-                                }
-                            }
+                        <Tweet  
+                            id={this.state.tweetAtivo._id}
+                            usuario={this.state.tweetAtivo.usuario}
+                            texto={this.state.tweetAtivo.conteudo}
+                            likeado={this.state.tweetAtivo.likeado}
+                            removivel={this.state.tweetAtivo.removivel}
+                            totalLikes={this.state.tweetAtivo.totalLikes}
+                            removeHandler={() => this.removeTweet(this.state.tweetAtivo._id)}
                         />
                     </Widget>
                 </Modal>
