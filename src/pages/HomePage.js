@@ -7,6 +7,8 @@ import TrendsArea from '../components/TrendsArea'
 import Tweet from '../components/Tweet'
 import Helmet from 'react-helmet'
 import Modal from '../components/Modal';
+import PropTypes from 'prop-types'
+import * as TweetsActions from '../actions/TweetsActions'
 
 class App extends Component {
 
@@ -22,64 +24,35 @@ class App extends Component {
     }
     
     // Métodos do Ciclo de Vida
+    static contextTypes = {
+        store: PropTypes.object
+    }
     componentDidMount() {
-        window.store.subscribe(() => {
-            console.log('Dentro do subscribe:', window.store.getState())
+        this.context.store.subscribe(() => {
+            console.log('Subscribe foi executado!')
             this.setState({
-                tweets: window.store.getState()
+                tweets: this.context.store.getState().tweets
             })
         })
-        fetch(`http://twitelum-api.herokuapp.com/tweets?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`)
-        .then((respostaDoServer) => respostaDoServer.json())
-        .then((tweetsQueVieramDoServer) => {
-            window.store.dispatch({
-                type: 'CARREGA_TWEETS',
-                tweets: tweetsQueVieramDoServer
-            })
-        })
+        
+        TweetsActions.carrega()
     }
 
-    adicionaTweet = (infoDosEvento) => {
+     adicionaTweet = async (infoDosEvento) => {
         infoDosEvento.preventDefault()
         const novoTweet = this.state.novoTweet
-        
-        fetch(`http://twitelum-api.herokuapp.com/tweets?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`, {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json',
-                // 'Authorization': localStorage.getItem('TOKEN')
-            },
-            body: JSON.stringify({ conteudo: novoTweet })
-        })
-        .then((respostaDoServer) => {
-            return respostaDoServer.json()
-        })
-        .then((tweetQueVeioDoServer) => {
-        // console.log('Resposta: ', tweetQueVeioDoServer)
-            this.setState({
-                tweets: [tweetQueVeioDoServer, ...this.state.tweets],
-                novoTweet: ''
+        TweetsActions.adiciona(novoTweet)
+            .then(() => {
+                this.setState({ novoTweet: '' })
             })
-        })
     }
 
     removeTweet = (idDoTweet) => {
-        fetch(`http://twitelum-api.herokuapp.com/tweets/${idDoTweet}?X-AUTH-TOKEN=${localStorage.getItem('TOKEN')}`, {
-            method: 'DELETE',
-        })
-        .then((res) => res.json())
-        .then((respostaConvertida) => {
-            console.log(respostaConvertida)
-            const listaAtualizada = this.state.tweets.filter((tweetAtual) => {
-                return tweetAtual._id !== idDoTweet
+        TweetsActions.remove(idDoTweet)
+            .then(() => {
+                this.fechaModal()
+                this.context.store.dispatch({ type: 'ADD_NOTIFICACAO', msg: 'Tweet removido com sucessinhos!' })
             })
-    
-            this.setState({
-                tweets: listaAtualizada
-            })
-
-            this.fechaModal()
-        })
     }
 
 
@@ -98,6 +71,7 @@ class App extends Component {
     }
     
     render() {
+        console.log('[a página está renderizando agora!!!!]', this.state)
         return (
             <Fragment>
                 <Helmet>
@@ -199,7 +173,20 @@ class App extends Component {
                         />
                     </Widget>
                 </Modal>
+                {/*
+                    ## Desafio: - Chamar o:  this.context.store.dispatch({
+                        type: 'ADD_NOTIFICACAO',
+                        msg: 'Alguma coisa'
+                    })
+                     quando remover o tweet
 
+                 */}
+                {
+                    this.context.store.getState().notificacao &&
+                    <div className="notificacaoMsg">
+                    { this.context.store.getState().notificacao }
+                    </div>
+                }
             </Fragment>
         );
     }
