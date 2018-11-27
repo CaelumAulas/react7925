@@ -104,3 +104,12 @@ Array.prototype.map = function(funcao) {
 - https://www.youtube.com/watch?v=Kphwg2IsJfA
 - https://circleci.com/
 -  https://github.com/omariosouto/cmail-back/blob/master/.circleci/config.yml
+
+## Performance
+- https://developers.google.com/web/tools/lighthouse/?hl=pt-br
+- Modelo para planejar a performance do site: https://developers.google.com/web/fundamentals/performance/rail?hl=pt-br
+- 14kb é o que vem na janela inicial do protocolo TCP (se seu site couber nisso vem o mais rápido o possível)
+
+### Lidar com imagens
+- https://cloudinary.com/
+- https://github.com/thumbor/thumbor
