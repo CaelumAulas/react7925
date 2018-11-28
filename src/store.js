@@ -18,6 +18,19 @@ function tweetsReducer(stateDaStore = [], acaoDisparada) {
         return listaAtualizada
     }
 
+
+    if(acaoDisparada.type === 'LIKE') {
+        console.log('Acao disparada', acaoDisparada)
+        const listaAtualizada = stateDaStore.map((tweetDaVoltaAtual) => {
+            if(tweetDaVoltaAtual._id === acaoDisparada.idDoTweet) {
+                tweetDaVoltaAtual.totalLikes = 10000
+                tweetDaVoltaAtual.likeado = true
+            }
+            return tweetDaVoltaAtual
+        })
+        return listaAtualizada
+    }
+
     return stateDaStore
 }
 

@@ -4,7 +4,7 @@ import NavMenu from '../components/NavMenu'
 import Dashboard from '../components/Dashboard'
 import Widget from '../components/Widget'
 import TrendsArea from '../components/TrendsArea'
-import Tweet from '../components/Tweet'
+import TweetContainer from '../components/Tweet/TweetContainer'
 import Helmet from 'react-helmet'
 import Modal from '../components/Modal';
 import PropTypes from 'prop-types'
@@ -47,13 +47,13 @@ class App extends Component {
             })
     }
 
-    removeTweet = (idDoTweet) => {
-        TweetsActions.remove(idDoTweet)
-            .then(() => {
-                this.fechaModal()
-                this.context.store.dispatch({ type: 'ADD_NOTIFICACAO', msg: 'Tweet removido com sucessinhos!' })
-            })
-    }
+    // removeTweet = (idDoTweet) => {
+    //     TweetsActions.remove(idDoTweet)
+    //         .then(() => {
+    //             this.fechaModal()
+    //             this.context.store.dispatch({ type: 'ADD_NOTIFICACAO', msg: 'Tweet removido com sucessinhos!' })
+    //         })
+    // }
 
 
     abreModal = (objetoDoTweetClicado) => {
@@ -71,7 +71,7 @@ class App extends Component {
     }
     
     render() {
-        console.log('[a página está renderizando agora!!!!]', this.state)
+        // console.log('[a página está renderizando agora!!!!]', this.state)
         return (
             <Fragment>
                 <Helmet>
@@ -139,18 +139,14 @@ class App extends Component {
 
                                 {
                                     this.state.tweets.map((tweetAtual, indice) => {
-                                        return <Tweet
+                                        return <TweetContainer
                                             key={tweetAtual._id}
-                                            id={tweetAtual._id}
-                                            usuario={tweetAtual.usuario}
-                                            texto={tweetAtual.conteudo}
-                                            likeado={tweetAtual.likeado}
-                                            removivel={tweetAtual.removivel}
-                                            totalLikes={tweetAtual.totalLikes}
-                                            removeHandler={() => this.removeTweet(tweetAtual._id)}
+                                            tweetAtual={tweetAtual}
+                                            onRemove={() => {
+                                                this.fechaModal()
+                                                this.context.store.dispatch({ type: 'ADD_NOTIFICACAO', msg: 'Tweet removido com sucessinhos!' })
+                                            }}
                                             handleAbreModal={() => this.abreModal(tweetAtual)}/>
-                                            // Fazer o setState que limpa os tweets
-                                            // na função removeTweet() na classe HomePage
                                     })
                                 }
                             </div>
@@ -162,7 +158,7 @@ class App extends Component {
                     onFechandoOModal={this.fechaModal}
                     isAberto={Boolean(this.state.tweetAtivo._id)}>
                     <Widget>
-                        <Tweet  
+                        {/* <Tweet  
                             id={this.state.tweetAtivo._id}
                             usuario={this.state.tweetAtivo.usuario}
                             texto={this.state.tweetAtivo.conteudo}
@@ -170,7 +166,7 @@ class App extends Component {
                             removivel={this.state.tweetAtivo.removivel}
                             totalLikes={this.state.tweetAtivo.totalLikes}
                             removeHandler={() => this.removeTweet(this.state.tweetAtivo._id)}
-                        />
+                        /> */}
                     </Widget>
                 </Modal>
                 {/*
@@ -181,9 +177,12 @@ class App extends Component {
                      quando remover o tweet
 
                  */}
+                
                 {
                     this.context.store.getState().notificacao &&
-                    <div className="notificacaoMsg">
+                    <div className="notificacaoMsg" onAnimationEnd={() => {
+                        this.context.store.dispatch({ type: 'REMOVE_NOTIFICACAO' })
+                    }}>
                     { this.context.store.getState().notificacao }
                     </div>
                 }
