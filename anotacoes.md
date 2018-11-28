@@ -113,3 +113,32 @@ Array.prototype.map = function(funcao) {
 ### Lidar com imagens
 - https://cloudinary.com/
 - https://github.com/thumbor/thumbor
+
+
+## Dica pós curso
+- https://javascript30.com/
+
+```js
+// Sempre que você for acessar dados externos, vc deveria criar um container component
+
+class TweetContainer {
+
+    componentDidMount() {
+        TweetsActions.carrega()
+    }
+    render () {
+    {
+        this.state.tweets.map((tweetAtual, indice) => {
+            return <TweetContainer
+                key={tweetAtual._id}
+                tweetAtual={tweetAtual}
+                onRemove={() => {
+                    this.fechaModal()
+                    this.context.store.dispatch({ type: 'ADD_NOTIFICACAO', msg: 'Tweet removido com sucessinhos!' })
+                }}
+                handleAbreModal={() => this.abreModal(tweetAtual)}/>
+        })
+    }
+    }
+}
+```
